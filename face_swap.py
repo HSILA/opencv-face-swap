@@ -105,14 +105,19 @@ def warp(face_path, json1, body_path, json2):
     body_faceless = cv2.bitwise_and(body, body, mask=body_face_mask)
     result = cv2.add(body_faceless, body_new_face)
 
-    cv2.imshow('Result', result)
+    # Seamless cloning
+    (x, y, widht, height) = cv2.boundingRect(convexhull2)
+    center_face2 = (int((x+x+widht)/2), int((y+y+height)/2))
+    seamlessclone = cv2.seamlessClone(result, body, body_head_mask, center_face2, cv2.NORMAL_CLONE)
+
+    cv2.imshow('Result', seamlessclone)
     cv2.waitKey()
     cv2.destroyAllWindows()
 
 
 if __name__ == '__main__':
-    json_0 = './images/obama.json'
-    json_1 = './images/clinton.json'
+    json_0 = './images/obama_auto.json'
+    json_1 = './images/clinton_auto.json'
     image_0 = './images/obama.png'
     image_1 = './images/clinton.png'
     warp(image_0, json_0, image_1, json_1)
